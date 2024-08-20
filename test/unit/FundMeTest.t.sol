@@ -8,14 +8,16 @@ import {DeployFundMe} from "../../script/DeployFundMe.s.sol";
 contract FundMeTest is Test {
     FundMe fundMe;
 
+    // the user used to simulate transaction
     address USER = makeAddr("user");
+
     uint256 constant SEND_VALUE = 0.1 ether;
     uint256 constant STARTING_BALANCE = 10 ether;
     uint256 constant GAS_PRICE = 1;
 
     function setUp() external {
         fundMe = new DeployFundMe().run();
-        vm.deal(USER, STARTING_BALANCE);
+        vm.deal(USER, STARTING_BALANCE); // for setting the balance of the created address
     }
 
     function testMinimumDollarIsFive() public {
@@ -35,7 +37,7 @@ contract FundMeTest is Test {
 
     function testFundFailsWithoutEnoughETH() public {
         vm.expectRevert(); // the next line should revert
-        fundMe.fund(); // send 0 value
+        fundMe.fund(); // send value 0
     }
 
     function testFundSucceedsWithEnoughETH() public funded {
@@ -51,7 +53,6 @@ contract FundMeTest is Test {
 
     function testOnlyOwnerCanWithdraw() public funded {
         vm.expectRevert();
-        vm.prank(USER);
         fundMe.withdraw();
     }
 

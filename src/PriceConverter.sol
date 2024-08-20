@@ -15,6 +15,7 @@ library PriceConverter {
             ,
 
         ) = priceFeed.latestRoundData();
+        // Beacause msg.value is 18 decimals
         return uint256(price * 1e10);
     }
 
